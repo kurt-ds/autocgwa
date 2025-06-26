@@ -75,6 +75,17 @@ export const SubjectTable = ({ subjects }: SubjectTableProps) => {
                 </tr>
               )
             })}
+            <tr className="bg-blue-50 font-bold">
+              <td className="border border-gray-300 px-4 py-3 text-right" colSpan={3}>
+                Total
+              </td>
+              <td className="border border-gray-300 px-4 py-3 text-center text-green-700">
+                {subjects.reduce((sum, s) => sum + (s.units || 0), 0).toFixed(2)}
+              </td>
+              <td className="border border-gray-300 px-4 py-3 text-center text-blue-700">
+                {subjects.reduce((sum, s) => sum + (s.honorPoints || 0), 0).toFixed(2)}
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useResult } from '../context/ResultContext'
 
 interface CalculateButtonProps {
   files: File[]
@@ -9,6 +10,7 @@ export const CalculateButton = ({ files }: CalculateButtonProps) => {
   const [isCalculating, setIsCalculating] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
+  const { setResult } = useResult()
 
   const handleCalculate = async () => {
     if (files.length === 0) {
@@ -39,7 +41,7 @@ export const CalculateButton = ({ files }: CalculateButtonProps) => {
       if (!data.subjects || !Array.isArray(data.subjects)) {
         console.warn('No subjects data received from backend')
         // Create a fallback subjects array if none provided
-        const fallbackSubjects = []
+        const fallbackSubjects: any[] = []
         if (data.grades && Array.isArray(data.grades)) {
           // Convert old format to new format
           data.grades.forEach((grade: any) => {
@@ -56,11 +58,12 @@ export const CalculateButton = ({ files }: CalculateButtonProps) => {
         data.subjects = fallbackSubjects
       }
       
-      // Prepare the subjects data for URL parameters
-      const subjectsParam = encodeURIComponent(JSON.stringify(data.subjects || []))
-      
-      // Redirect to results page with data
-      router.push(`/result?cgwa=${data.cgwa}&subjects=${subjectsParam}`)
+      // Store result in context and navigate to /result
+      setResult({
+        cgwa: data.cgwa,
+        subjects: data.subjects || []
+      })
+      router.push('/result')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to calculate CGWA')
     } finally {

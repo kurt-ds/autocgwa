@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ResultProvider } from '../context/ResultContext'
 
 export const metadata: Metadata = {
   title: "AutoCGWA",
@@ -14,7 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        {children}
+        <ResultProvider>
+          {children}
+        </ResultProvider>
       </body>
     </html>
   );

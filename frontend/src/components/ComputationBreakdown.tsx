@@ -16,15 +16,6 @@ export const ComputationBreakdown = ({ totalHonorPoints, totalUnits, cgwa }: Com
       <h2 className="text-2xl font-bold text-gray-800 mb-4">CGWA Computation</h2>
       <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
         <div className="space-y-4">
-          {/* Formula */}
-          <div className="text-center mb-6">
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">Formula</h3>
-            <div className="bg-white border border-gray-300 rounded-lg p-4 inline-block">
-              <span className="text-xl font-mono text-blue-600">
-                CGWA = Σ(Honor Points) ÷ Σ(Units)
-              </span>
-            </div>
-          </div>
 
           {/* Totals */}
           <div className="grid md:grid-cols-2 gap-6 mb-6">
@@ -52,25 +43,16 @@ export const ComputationBreakdown = ({ totalHonorPoints, totalUnits, cgwa }: Com
           {/* Calculation */}
           <div className="bg-white border border-gray-300 rounded-lg p-6">
             <h4 className="text-lg font-semibold text-gray-800 mb-4">Calculation</h4>
-            <div className="space-y-3 font-mono text-lg">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Total Honor Points:</span>
-                <span className="font-bold text-blue-600">{totalHonorPoints.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Total Units:</span>
-                <span className="font-bold text-green-600">{totalUnits.toFixed(2)}</span>
-              </div>
-              <div className="border-t border-gray-300 pt-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-800 font-semibold">CGWA:</span>
-                  <span className="text-2xl font-bold text-purple-600">
-                    {cgwa.toFixed(2)}
+            <div className="flex flex-col items-center font-mono text-lg">
+              <div className="flex items-center mt-2">
+                <span className="inline-block text-xl font-mono mr-4">
+                  <span className="flex flex-col items-center">
+                    <span className="text-blue-700">{totalHonorPoints.toFixed(2)}</span>
+                    <span className="w-20 border-t-2 border-gray-500 my-1"></span>
+                    <span className="text-green-700">{totalUnits.toFixed(2)}</span>
                   </span>
-                </div>
-                <div className="text-sm text-gray-500 mt-1">
-                  {totalHonorPoints.toFixed(2)} ÷ {totalUnits.toFixed(2)} = {cgwa.toFixed(2)}
-                </div>
+                </span>
+                <span className="text-2xl font-bold text-purple-600 ml-4">= {cgwa.toFixed(2)}</span>
               </div>
             </div>
           </div>

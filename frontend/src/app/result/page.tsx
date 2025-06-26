@@ -1,41 +1,19 @@
 'use client'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
+import { useResult } from '../../context/ResultContext'
 import { Hero } from '../../components/Hero'
 import { ResultDisplay } from '../../components/ResultDisplay'
 import { SubjectTable } from '../../components/SubjectTable'
 import { ComputationBreakdown } from '../../components/ComputationBreakdown'
+import { Footer } from '../../components/Footer'  
 
 export default function ResultPage() {
-  const searchParams = useSearchParams()
   const router = useRouter()
-  const cgwa = searchParams.get('cgwa')
-  const subjects = searchParams.get('subjects')
-  
-  // Debug logs
-  console.log('CGWA from URL:', cgwa)
-  console.log('Subjects from URL:', subjects)
-  
-  // Parse the subjects data if it exists
-  let parsedSubjects: any[] = []
-  let totalHonorPoints = 0
-  let totalUnits = 0
-  
-  if (subjects) {
-    try {
-      parsedSubjects = JSON.parse(decodeURIComponent(subjects))
-      console.log('Parsed subjects:', parsedSubjects)
-      totalHonorPoints = parsedSubjects.reduce((sum, subject) => sum + (subject.honorPoints || 0), 0)
-      totalUnits = parsedSubjects.reduce((sum, subject) => sum + (subject.units || 0), 0)
-      console.log('Total honor points:', totalHonorPoints)
-      console.log('Total units:', totalUnits)
-    } catch (error) {
-      console.error('Error parsing subjects data:', error)
-    }
-  } else {
-    console.warn('No subjects data found in URL parameters')
-  }
-
-  const cgwaValue = cgwa ? parseFloat(cgwa) : null
+  const { cgwa, subjects } = useResult()
+  const parsedSubjects = subjects || []
+  const cgwaValue = cgwa
+  const totalHonorPoints = parsedSubjects.reduce((sum, subject) => sum + (subject.honorPoints || 0), 0)
+  const totalUnits = parsedSubjects.reduce((sum, subject) => sum + (subject.units || 0), 0)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
@@ -65,6 +43,7 @@ export default function ResultPage() {
           />
         </div>
       </div>
-    </div>
+      <Footer />
+      </div>
   )
 } 
