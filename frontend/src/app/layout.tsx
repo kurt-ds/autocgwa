@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "CGWA Checker",
+  title: "AutoCGWA",
   description: "Calculate your Cumulative Grade Weighted Average (CGWA)",
 };
 

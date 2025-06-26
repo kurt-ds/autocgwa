@@ -125,7 +125,7 @@ async def upload(files: List[UploadFile] = File(...)):
         # Read file content
         file_content = await file.read()
         
-                # Extract text from PDF
+        # Extract text from PDF
         pdf_text = read_pdf_content(file_content)
 
         # Parse structured grades
@@ -148,29 +148,41 @@ async def upload(files: List[UploadFile] = File(...)):
         
         logger.info(f"Successfully processed PDF: {file.filename}")
     
-    
-    # Calculate CGWA: convert letter grades to 0.0 for calculation but keep their units
+    # Calculate CGWA and prepare subjects data for frontend
     total_points = 0
     total_units = 0
+    subjects = []
     
     for grade in all_grades:
         units = grade["units"]
         total_units += units
         
+        # Calculate honor points
         if grade["grade_type"] == "numeric":
-            total_points += grade["final_grade"] * units
+            honor_points = grade["final_grade"] * units
+            total_points += honor_points
         else:
             # Letter grades (R, Dr, F, etc.) count as 0.0 but units still count
-            total_points += 0.0 * units
+            honor_points = 0.0 * units
+            total_points += honor_points
+        
+        # Prepare subject data in frontend format
+        subjects.append({
+            "code": grade["subject_code"],
+            "description": grade["subject_desc"],
+            "finalGrade": grade["final_grade"],
+            "units": units,
+            "honorPoints": honor_points
+        })
     
     cgwa = round(total_points / total_units, 3) if total_units > 0 else 0.000
     
-    logger.info(f"Calculated CGWA ANG POGI MO ALLEN KURT: {cgwa} (total points: {total_points}, total units: {total_units})")
+    logger.info(f"Calculated CGWA: {cgwa} (total points: {total_points}, total units: {total_units})")
     return {
         "cgwa": cgwa,
+        "subjects": subjects,
         "files_processed": len(files),
         "subjects_processed": len(all_grades),
         "total_points": total_points,
-        "total_units": total_units,
-        "grades": all_grades  # Optional: return for debugging
+        "total_units": total_units
     }
