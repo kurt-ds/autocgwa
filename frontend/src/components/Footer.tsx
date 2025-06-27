@@ -4,8 +4,8 @@ export const Footer = () => (
   <footer className="w-full bg-blue-700 py-10 mt-12">
     <div className="max-w-5xl mx-auto px-4 flex flex-col items-center text-white">
       <div className="text-center mb-2">
-        <span className="block font-semibold text-lg mb-1">© 2025 All rights reserved.</span>
-        <span className="block text-base mb-4">Made with <span className="text-xl align-middle">❤️</span></span>
+        <span className="block font-semibold text-lg mb-1">© 2025 All rights reserved. Made by Kurt</span>
+        <span className="block text-base mb-4">Made with <span className="text-xl align-middle">🩵</span></span>
       </div>
       <div className="flex space-x-6 mt-2">
         <a href="https://github.com/kurt-ds" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="hover:text-blue-200 transition-colors">

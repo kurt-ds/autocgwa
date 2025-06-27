@@ -2,16 +2,25 @@
 import React, { useState, useEffect } from 'react'
 
 export const DisclaimerDialog = () => {
-  const [isVisible, setIsVisible] = useState(true)
+  const [isVisible, setIsVisible] = useState(false)
 
-  // Auto-close after 15 seconds
+  // Show after 2 seconds, then auto-close after 15 seconds
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const showTimer = setTimeout(() => {
+      setIsVisible(true)
+    }, 2000)
+
+    return () => clearTimeout(showTimer)
+  }, [])
+
+  // Auto-close after 15 seconds from when it becomes visible
+  useEffect(() => {
+    if (!isVisible) return
+    const closeTimer = setTimeout(() => {
       setIsVisible(false)
     }, 15000)
-
-    return () => clearTimeout(timer)
-  }, [])
+    return () => clearTimeout(closeTimer)
+  }, [isVisible])
 
   const handleClose = () => {
     setIsVisible(false)
@@ -22,7 +31,7 @@ export const DisclaimerDialog = () => {
   }
 
   return (
-    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-amber-50 border border-amber-200 shadow-lg rounded-lg max-w-2xl w-full mx-4 flex justify-center items-center">
+    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-amber-50 border border-amber-200 shadow-lg rounded-lg max-w-2xl w-full mx-4 flex justify-center items-center animate-fade-in-up">
       <div className="px-4 py-3 w-full">
         <div className="flex items-center justify-between">
           <div className="flex items-center flex-1">
@@ -31,7 +40,7 @@ export const DisclaimerDialog = () => {
             </svg>
             <div className="text-left">
               <p className="text-amber-800 font-medium text-sm">
-                <strong>Important Notice:</strong> This application is specifically designed for National University - Philippines grade format.
+                <strong>Important Notice:</strong> This application is specifically designed for NU Philippines grade format.
               </p>
               <p className="text-amber-700 text-xs mt-1">
                 If you are from other universities or campuses, the auto-CGWA calculation may not work properly due to different grade formatting systems.

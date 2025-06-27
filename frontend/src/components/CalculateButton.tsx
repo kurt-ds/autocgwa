@@ -77,9 +77,9 @@ export const CalculateButton = ({ files }: CalculateButtonProps) => {
         <button
           onClick={handleCalculate}
           disabled={isCalculating || files.length === 0}
-          className={`px-8 py-3 rounded-md text-white font-medium text-lg flex items-center ${
-            files.length === 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
-          } transition-colors`}
+          className={`px-8 py-3 rounded-lg text-white font-semibold text-lg flex items-center shadow-md transition-all duration-200
+            ${files.length === 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-200'}
+          `}
         >
           {isCalculating ? (
             <>
@@ -88,9 +88,7 @@ export const CalculateButton = ({ files }: CalculateButtonProps) => {
             </>
           ) : (
             <>
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-              </svg>
+              <span className="text-2xl mr-2">📊</span>
               Calculate CGWA
             </>
           )}

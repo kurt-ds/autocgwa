@@ -27,6 +27,8 @@ services:
       - backend
     networks:
       - cgwa-net
+    env_file:
+      - ./frontend/.env.local
 
 networks:
   cgwa-net: 

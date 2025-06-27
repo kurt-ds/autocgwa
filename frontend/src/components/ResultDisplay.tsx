@@ -54,7 +54,7 @@ export const ResultDisplay = ({ cgwa, subjects }: ResultDisplayProps) => {
       <div className="grid md:grid-cols-2 gap-8 mb-6">
         {/* Latin Honors */}
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Your CGWA is qualified for...</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4"> {latinHonor ? 'Your CGWA is qualified for...' : 'Unfortunately...'}</h2>
           {latinHonor ? (
             <div className="text-center">
               <div className={`text-4xl font-bold ${honorColor} mb-2`}>
