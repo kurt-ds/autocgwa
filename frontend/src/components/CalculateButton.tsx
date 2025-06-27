@@ -25,7 +25,9 @@ export const CalculateButton = ({ files }: CalculateButtonProps) => {
       const formData = new FormData()
       files.forEach(file => formData.append('files', file))
       
-      const res = await fetch('http://localhost:8000/upload', {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+
+      const res = await fetch(API_URL + '/upload', {
         method: 'POST',
         body: formData
       })
