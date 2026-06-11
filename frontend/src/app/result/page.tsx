@@ -5,9 +5,8 @@ import { Hero } from '../../components/Hero'
 import { ResultDisplay } from '../../components/ResultDisplay'
 import { SubjectTable } from '../../components/SubjectTable'
 import { ComputationBreakdown } from '../../components/ComputationBreakdown'
-import { SatisfactionForm } from '../../components/SatisfactionForm'
 import { Footer } from '../../components/Footer'
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 
 export default function ResultPage() {
   const router = useRouter()
@@ -18,31 +17,9 @@ export default function ResultPage() {
   const totalUnits = parsedSubjects.reduce((sum, subject) => sum + (subject.units || 0), 0)
   
   const computationRef = useRef<HTMLDivElement>(null)
-  const [showSatisfactionForm, setShowSatisfactionForm] = useState(false)
-  const [hasProvidedFeedback, setHasProvidedFeedback] = useState(false)
 
   // Check if there are subjects available
   const hasGrades = parsedSubjects.length > 0 && cgwaValue !== null
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (computationRef.current && !hasProvidedFeedback && hasGrades) {
-        const rect = computationRef.current.getBoundingClientRect()
-        const isVisible = rect.top <= window.innerHeight * 0.7 // Show when 70% of the viewport is reached
-        setShowSatisfactionForm(isVisible)
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    handleScroll() // Check initial position
-
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [hasProvidedFeedback, hasGrades])
-
-  const handleHideSatisfactionForm = () => {
-    setShowSatisfactionForm(false)
-    setHasProvidedFeedback(true) // Mark that feedback has been provided
-  }
 
   return (
     <div className={`${hasGrades ? 'min-h-screen' : 'h-screen'} bg-gradient-to-b from-blue-50 to-white flex flex-col`}>
@@ -90,10 +67,6 @@ export default function ResultPage() {
         )}
       </div>
       
-      <SatisfactionForm 
-        isVisible={showSatisfactionForm} 
-        onHide={handleHideSatisfactionForm}
-      />
       <Footer />
     </div>
   )

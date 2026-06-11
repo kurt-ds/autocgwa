@@ -39,7 +39,7 @@ export const FileUploadZone = ({ onFileUpload }: FileUploadZoneProps) => {
 
   return (
     <div
-      className={`border-2 border-dashed rounded-lg p-8 text-center transition-all duration-200 ease-in-out
+      className={`w-full border-2 border-dashed rounded-lg p-8 text-center transition-all duration-200 ease-in-out
         ${isDragging ? 'border-blue-500 bg-blue-50 scale-105 shadow-xl' : 'border-gray-300 bg-white hover:scale-105 hover:shadow-lg hover:border-blue-400'}
       `}
       onDragOver={handleDragOver}

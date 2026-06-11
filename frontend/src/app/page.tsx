@@ -6,13 +6,10 @@ import { FileList } from '../components/FileList'
 import { CalculateButton } from '../components/CalculateButton'
 import { DisclaimerDialog } from '../components/DisclaimerDialog'
 import { Footer } from '../components/Footer'
-import { supabase } from '../lib/supabase'
 
 export default function Home() {
   const [files, setFiles] = useState<File[]>([])
-  const [studentsHelped, setStudentsHelped] = useState<number>(0)
   const [showDisclaimer, setShowDisclaimer] = useState(true);
-  const [animatedCount, setAnimatedCount] = useState(0);
 
   const handleFileUpload = (newFiles: FileList | null) => {
     if (!newFiles) return
@@ -41,44 +38,6 @@ export default function Home() {
     }
   }, [files]);
 
-  useEffect(() => {
-    // Fetch count of satisfied students from Supabase
-    const fetchStudentsHelped = async () => {
-      const { count, error } = await supabase
-        .from('student_satisfaction')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_satisfied', true)
-      if (!error && typeof count === 'number') {
-        setStudentsHelped(count)
-      }
-    }
-    fetchStudentsHelped()
-  }, [])
-
-  useEffect(() => {
-    let start = 0;
-    const end = studentsHelped;
-    if (start === end) return;
-
-    let current = start;
-    const duration = 800; // ms
-    const increment = end > 100 ? Math.ceil(end / 100) : 1;
-    const stepTime = Math.max(Math.floor(duration / end), 10);
-
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= end) {
-        current = end;
-        clearInterval(timer);
-      }
-      setAnimatedCount(current);
-    }, stepTime);
-
-    return () => clearInterval(timer);
-  }, [studentsHelped]);
-
-  const displayedCount = studentsHelped;
-
   return (
     <>
       <DisclaimerDialog />
@@ -86,35 +45,26 @@ export default function Home() {
         <div className="max-w-5xl mx-auto px-4 py-12">
           <Hero />
           <div className="mt-12 bg-white rounded-xl shadow-lg p-0 md:p-6">
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-0 md:gap-8 items-stretch">
-              {/* File Upload Area - left (60%) */}
-              <div className="col-span-1 md:col-span-3 flex flex-col items-center justify-center p-6">
-                <FileUploadZone onFileUpload={handleFileUpload} />
-                <div className="w-full max-w-[350px] md:max-w-[400px]">
-                  <FileList files={files} onRemove={removeFile} />
-                </div>
-                {/* Dismissible Disclaimer */}
-                {showDisclaimer && (
-                  <div className="relative mt-6 max-w-[400px] mx-auto bg-blue-50 border border-blue-200 text-blue-800 rounded-lg px-4 py-3 flex items-center shadow-md animate-fade-in">
-                    <svg className="w-5 h-5 mr-2 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <div className="flex flex-col items-center justify-center p-6">
+              <FileUploadZone onFileUpload={handleFileUpload} />
+              <div className="w-full">
+                <FileList files={files} onRemove={removeFile} />
+              </div>
+              {/* Dismissible Disclaimer */}
+              {showDisclaimer && (
+                <div className="relative mt-6 w-full bg-blue-50 border border-blue-200 text-blue-800 rounded-lg px-4 py-3 flex items-center shadow-md animate-fade-in">
+                  <svg className="w-5 h-5 mr-2 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="flex-1 text-sm">We do <b>not</b> store any of your uploaded files or data. All processing is done securely and privately.</span>
+                  <button onClick={() => setShowDisclaimer(false)} className="ml-3 text-blue-400 hover:text-blue-700 transition-colors" aria-label="Dismiss disclaimer">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                    <span className="flex-1 text-sm">We do <b>not</b> store any of your uploaded files or data. All processing is done securely and privately.</span>
-                    <button onClick={() => setShowDisclaimer(false)} className="ml-3 text-blue-400 hover:text-blue-700 transition-colors" aria-label="Dismiss disclaimer">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                )}
-                <CalculateButton files={files} />
-              </div>
-              {/* Stat Counter Card - right (40%) */}
-              <div className="col-span-1 md:col-span-2 flex flex-col items-center justify-center bg-gradient-to-br from-blue-600 to-blue-400 rounded-2xl shadow-lg p-8 md:ml-0">
-                <span className="text-5xl font-extrabold text-white mb-2">{animatedCount.toLocaleString()}</span>
-                <span className="text-lg font-semibold text-white">Students Helped</span>
-                <span className="text-base text-blue-100 mt-2">and counting!</span>
-              </div>
+                  </button>
+                </div>
+              )}
+              <CalculateButton files={files} />
             </div>
           </div>
         </div>
